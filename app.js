@@ -9,7 +9,6 @@ const port = process.env.PORT || 3000;
 // this express server should be secured/hardened for production use
 const app = express();
 
-app.set('view engine', 'pug');
 // memory store shouldn't be used in production
 app.use(session({
   secret: process.env.SESSION_SECRET || 'dev',
@@ -19,6 +18,7 @@ app.use(session({
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.set('view engine', 'pug');
 app.set('json spaces', 2);
 
 app.enable('trust proxy');
@@ -28,14 +28,18 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/application', (req, res, next) => {
-  if (req.session.userId) {
+    // console.log(req.sessionStore.sessions)
+    // console.log(req.session)
+    const sessionInfo = JSON.parse(req.sessionStore.sessions[Object.keys(req.sessionStore.sessions)[0]])
+    console.log(sessionInfo)
+  if (sessionInfo.userId) {
     return res.render('index', {
-      email: req.session.email,
-      username: req.session.username,
-      ltiConsumer: req.session.ltiConsumer,
-      userId: req.session.userId,
-      isTutor: req.session.isTutor,
-      context_id: req.session.context_id
+      email: sessionInfo.email,
+      username: sessionInfo.username,
+      ltiConsumer: sessionInfo.ltiConsumer,
+      userId: sessionInfo.userId,
+      isTutor: sessionInfo.isTutor,
+      context_id: sessionInfo.context_id
     })
   } else {
     next(new Error('Session invalid. Please login via LTI to use this application.'));

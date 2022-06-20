@@ -56,8 +56,13 @@ exports.handleLaunch = (req, res, next) => {
           req.session.isTutor = provider.instructor === true;
           req.session.context_id = provider.context_id;
 
-          return res.redirect(301, '/application');
+          console.log("valid cred. ->", req.session)
+
+            return res.redirect(301, '/application');
         });
+        // req.session.save(err => {
+        //     console.log("session saved -> redirecting ...")
+        // });
       } else {
         return next(err);
       }
