@@ -58,7 +58,7 @@ exports.handleLaunch = (req, res, next) => {
 
           console.log("valid cred. ->", req.session)
 
-            return res.redirect(301, '/application');
+          return res.redirect(301, '/application');
         });
         // req.session.save(err => {
         //     console.log("session saved -> redirecting ...")

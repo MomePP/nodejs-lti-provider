@@ -29,8 +29,11 @@ app.get('/', (req, res, next) => {
 
 app.get('/application', (req, res, next) => {
     // console.log(req.sessionStore.sessions)
-    // console.log(req.session)
-    const sessionInfo = JSON.parse(req.sessionStore.sessions[Object.keys(req.sessionStore.sessions)[0]])
+    const sessionKeys = Object.keys(req.sessionStore.sessions)
+    const latestSession = sessionKeys[sessionKeys.length - 1]
+    const sessionInfo = JSON.parse(req.sessionStore.sessions[latestSession])
+    console.log('sessions:', sessionKeys)
+    console.log('latest session:', latestSession)
     console.log(sessionInfo)
   if (sessionInfo.userId) {
     return res.render('index', {
